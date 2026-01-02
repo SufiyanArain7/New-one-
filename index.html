@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Surprise ❤️</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: radial-gradient(circle at top, #ff9a9e, #fad0c4);
+  color: white;
+  text-align: center;
+  overflow-x: hidden;
+}
+
+.hidden {
+  display: none;
+}
+
+/* COUNTDOWN */
+#countdown {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: clamp(2.2rem, 6vw, 3.5rem);
+  animation: glow 1s infinite alternate;
+  padding: 20px;
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 10px #fff; }
+  to { text-shadow: 0 0 30px #ff4b5c; }
+}
+
+/* PHOTO SECTION */
+#photo-section {
+  padding: 30px 15px;
+}
+
+#photo-section img {
+  width: min(260px, 80vw);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  animation: zoomIn 2s;
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.5); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.name {
+  margin-top: 12px;
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  font-weight: bold;
+  color: #fff;
+}
+
+.date {
+  margin-top: 5px;
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+/* BUTTON */
+button {
+  margin-top: 20px;
+  padding: 12px 28px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 30px;
+  background: #ff4b5c;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+/* CARD */
+#card-section {
+  padding: 20px 15px 40px;
+}
+
+.card {
+  background: white;
+  color: #333;
+  width: 100%;
+  max-width: 420px;
+  margin: auto;
+  padding: 25px;
+  border-radius: 25px;
+  animation: slideUp 2s;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(80px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.card h2 {
+  color: #ff4b5c;
+}
+
+/* BALLOONS */
+.balloon {
+  position: fixed;
+  bottom: -100px;
+  width: 40px;
+  height: 55px;
+  border-radius: 50%;
+  animation: float 9s infinite ease-in;
+  z-index: -1;
+}
+
+.balloon::after {
+  content: '';
+  width: 2px;
+  height: 40px;
+  background: #555;
+  position: absolute;
+  top: 55px;
+  left: 50%;
+}
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-120vh); }
+}
+
+/* HEARTS */
+.heart {
+  position: fixed;
+  bottom: -20px;
+  font-size: 20px;
+  animation: heartFloat 6s linear infinite;
+}
+
+@keyframes heartFloat {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-100vh); opacity: 0; }
+}
+
+/* FIREWORK */
+.firework {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  animation: explode 1s infinite;
+}
+
+@keyframes explode {
+  from { transform: scale(1); opacity: 1; }
+  to { transform: scale(5); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- COUNTDOWN -->
+<div id="countdown">⏳ Loading...</div>
+
+<!-- PHOTO SECTION -->
+<div id="photo-section" class="hidden">
+  <h1>🎉 Happy Birthday 🎉</h1>
+
+  <img src="her-photo.jpg" alt="Her Photo">
+
+  <!-- HER NAME -->
+  <div class="name">💖 Ayesha 💖</div>
+
+  <!-- DOB -->
+  <div class="date">Born on: 15 March 2003 🎂</div>
+
+  <button onclick="revealCard()">🎁 Reveal Your Surprise</button>
+</div>
+
+<!-- CARD -->
+<div id="card-section" class="hidden">
+  <div class="card">
+    <h2>💌 Best Wishes 💌</h2>
+    <p>
+      On this beautiful day, I just want you to know  
+      how incredibly special you are to me 💕<br><br>
+      May your life be filled with love, happiness,  
+      success and endless smiles ✨<br><br>
+      Happy Birthday ❤️ Stay blessed always 🌸
+    </p>
+    <button onclick="share()">📱 Share This Moment</button>
+  </div>
+</div>
+
+<!-- BALLOONS -->
+<div class="balloon" style="left:10%; background:#ff4b5c;"></div>
+<div class="balloon" style="left:30%; background:#ffd93d;"></div>
+<div class="balloon" style="left:50%; background:#6a5acd;"></div>
+<div class="balloon" style="left:70%; background:#00c9a7;"></div>
+<div class="balloon" style="left:90%; background:#ff9f1c;"></div>
+
+<!-- MUSIC -->
+<audio id="music" src="music.mp3" loop></audio>
+
+<script>
+// 🎂 SET REAL BIRTHDAY DATE & TIME HERE
+const birthday = new Date("March 15, 2026 00:00:00").getTime();
+
+const countdown = document.getElementById("countdown");
+const photo = document.getElementById("photo-section");
+const card = document.getElementById("card-section");
+const music = document.getElementById("music");
+
+setInterval(() => {
+  const now = new Date().getTime();
+  const diff = birthday - now;
+
+  if (diff <= 0) {
+    countdown.style.display = "none";
+    photo.classList.remove("hidden");
+    music.play();
+    fireworks();
+    hearts();
+    return;
+  }
+
+  const h = Math.floor(diff / (1000 * 60 * 60));
+  const m = Math.floor((diff / (1000 * 60)) % 60);
+  const s = Math.floor((diff / 1000) % 60);
+
+  countdown.innerHTML = `⏳ ${h}h ${m}m ${s}s`;
+}, 1000);
+
+function revealCard() {
+  card.classList.remove("hidden");
+}
+
+function fireworks() {
+  setInterval(() => {
+    const fw = document.createElement("div");
+    fw.className = "firework";
+    fw.style.left = Math.random() * 100 + "vw";
+    fw.style.top = Math.random() * 50 + "vh";
+    fw.style.background = `hsl(${Math.random()*360},100%,50%)`;
+    document.body.appendChild(fw);
+    setTimeout(() => fw.remove(), 1000);
+  }, 700);
+}
+
+function hearts() {
+  setInterval(() => {
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.innerHTML = "💖";
+    h.style.left = Math.random() * 100 + "vw";
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 6000);
+  }, 600);
+}
+
+function share() {
+  const msg = "🎉 A beautiful birthday surprise made with love ❤️";
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`);
+}
+</script>
+
+</body>
+  </html>
+  
